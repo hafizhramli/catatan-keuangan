@@ -1,0 +1,100 @@
+.transaction-row {
+  height: 76px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.transaction-row td {
+  padding: var(--space-3) var(--space-3);
+  vertical-align: middle;
+}
+
+.transaction-row td:first-child {
+  padding-left: var(--space-5);
+}
+
+.transaction-row td:last-child {
+  padding-right: var(--space-5);
+}
+
+.transaction-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.transaction-icon-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+.transaction-icon-tile--income {
+  background: var(--color-action-soft);
+  color: var(--color-action-hover);
+}
+
+.transaction-icon-tile--expense {
+  background: var(--neutral-100);
+  color: var(--neutral-600);
+}
+
+.transaction-name {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.transaction-name__title {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.transaction-name__date,
+.transaction-cell {
+  color: var(--color-text-muted);
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
+}
+
+.transaction-cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.transaction-amount {
+  text-align: right;
+  font-weight: var(--text-amount-weight);
+  white-space: nowrap;
+}
+
+.transaction-amount--income {
+  color: var(--color-action);
+}
+
+.transaction-amount--expense {
+  color: var(--color-expense);
+}
+
+.transaction-actions-cell {
+  text-align: right;
+  vertical-align: middle;
+  padding-right: var(--space-5);
+  width: 44px;
+}
+
+.transaction-actions-cell .row-menu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+}

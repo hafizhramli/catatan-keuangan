@@ -1,0 +1,36 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: var(--text-label-size);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--text-label-line-height);
+  white-space: nowrap;
+}
+
+.badge--success {
+  background: var(--color-action-soft);
+  color: var(--color-action-hover);
+}
+
+.badge--warning {
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
+}
+
+.badge--neutral {
+  background: var(--neutral-100);
+  color: var(--neutral-600);
+}
+
+.badge::before {
+  width: 5px;
+  height: 5px;
+  margin-right: var(--space-1);
+  border-radius: var(--radius-full);
+  background: currentColor;
+  content: '';
+  flex: 0 0 auto;
+}

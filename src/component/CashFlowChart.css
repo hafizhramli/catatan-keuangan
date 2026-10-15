@@ -1,0 +1,126 @@
+.cashflow-card {
+  padding: var(--space-5);
+}
+
+.cashflow-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
+.cashflow-card__title-group .section-title {
+  margin: 0 0 var(--space-1);
+}
+
+.cashflow-card__subtitle {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-label-size);
+}
+
+.cashflow-card__legend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: var(--text-label-size);
+  color: var(--color-text-muted);
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.legend-dot--income {
+  background-color: var(--color-action);
+}
+
+.legend-dot--expense {
+  background-color: var(--color-expense);
+}
+
+.cashflow-chart-container {
+  width: 100%;
+  margin: var(--space-4) 0;
+  overflow: hidden;
+}
+
+.cashflow-svg {
+  width: 100%;
+  height: auto;
+  min-height: 200px;
+  max-height: 240px;
+  display: block;
+}
+
+.chart-grid-line {
+  stroke: var(--neutral-200);
+  stroke-dasharray: 2 2;
+  stroke-width: 1;
+}
+
+.chart-axis-label {
+  fill: var(--neutral-600);
+  font-size: 11px;
+  font-family: var(--font-sans);
+}
+
+.chart-axis-label--current {
+  fill: var(--color-text);
+  font-weight: var(--font-weight-semibold);
+}
+
+.chart-line--income {
+  fill: none;
+  stroke: var(--color-action);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chart-line--expense {
+  fill: none;
+  stroke: var(--color-expense);
+  stroke-width: 2;
+  stroke-dasharray: 4 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chart-marker--income {
+  fill: var(--color-action);
+}
+
+.chart-marker--expense {
+  fill: var(--color-expense);
+}
+
+.cashflow-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-body-size);
+}
+
+.cashflow-card__footer-label {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.cashflow-card__footer-value {
+  color: var(--color-action-hover);
+  font-weight: var(--font-weight-semibold);
+  font-size: 15px;
+}

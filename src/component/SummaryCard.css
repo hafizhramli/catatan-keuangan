@@ -1,0 +1,74 @@
+.summary-card {
+  display: grid;
+  align-content: space-between;
+  min-height: 132px;
+  padding: var(--space-5);
+}
+
+.summary-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.summary-label {
+  color: var(--color-text-muted);
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
+  font-weight: var(--font-weight-medium);
+}
+
+.summary-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+}
+
+.summary-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.summary-card--balance .summary-icon {
+  color: var(--color-text-muted-on-inverse);
+}
+
+.summary-value {
+  display: block;
+  color: var(--color-text);
+  font-size: var(--text-amount-size);
+  font-weight: var(--text-amount-weight);
+  line-height: var(--text-amount-line-height);
+}
+
+.summary-card--balance {
+  border-color: var(--color-surface-inverse);
+  background: var(--color-surface-inverse);
+  color: var(--color-on-inverse);
+}
+
+.summary-card--balance .summary-label,
+.summary-card--balance .summary-value {
+  color: var(--color-on-inverse);
+}
+
+.summary-card--balance .summary-footnote {
+  color: var(--color-text-muted-on-inverse);
+}
+
+.summary-card--income .summary-value {
+  color: var(--color-action);
+}
+
+.summary-card--expense .summary-value {
+  color: var(--color-expense);
+}
+
+.summary-footnote {
+  color: var(--color-text-muted);
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
+}

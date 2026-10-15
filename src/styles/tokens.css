@@ -1,0 +1,98 @@
+:root {
+  /* ===== Lapisan 1: primitif ===== */
+  --neutral-50: #faf9f6;
+  --neutral-100: #f0f0eb;
+  --neutral-200: #e3e6df;
+  --neutral-400: #919792;
+  --neutral-600: #707773;
+  --neutral-900: #242c29;
+
+  --emerald-50: #eaecb1;
+  --emerald-100: #bcbf74;
+  --emerald-300: #8b8e39;
+  --emerald-600: #6b6d1c;
+  --emerald-700: #52550f;
+  --emerald-900: #272901;
+
+  /* ===== Lapisan 2: semantik (menunjuk ke primitif) ===== */
+  --color-action: var(--emerald-600);
+  --color-action-hover: var(--emerald-700);
+  --color-action-soft: var(--emerald-50);
+  --color-expense: #ad5548;
+  --color-expense-hover: #8e4036;
+  --color-expense-soft: #faeeea;
+  --color-warning: #966a1d;
+  --color-warning-soft: #fcf3df;
+
+  --color-text: var(--neutral-900);
+  --color-text-muted: var(--neutral-600);
+  --color-border: var(--neutral-200);
+  --color-border-strong: var(--neutral-400);
+
+  --color-canvas: #f5f4f0;
+  --color-surface: #ffffff;
+  --color-surface-subtle: var(--neutral-50);
+  --color-surface-inverse: var(--emerald-900);
+
+  --color-on-action: #ffffff;
+  --color-on-inverse: #ffffff;
+  --color-text-muted-on-inverse: var(--emerald-100);
+  --color-backdrop: rgb(36 44 41 / 36%);
+
+  --color-disabled-bg: #eaece7;
+  --color-disabled-text: #939a94;
+  --color-error: var(--color-expense);
+  --color-error-soft: var(--color-expense-soft);
+
+  --focus-ring-width: 3px;
+  --focus-ring-color: var(--color-action);
+
+  /* ===== Jarak, kelipatan 4 ===== */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* ===== Radius ===== */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* ===== Bayangan ===== */
+  --shadow-card: 0 2px 8px rgb(36 44 41 / 3%);
+  --shadow-dialog: 0 12px 32px rgb(36 44 41 / 12%);
+
+  /* ===== Font ===== */
+  --font-sans: 'Plus Jakarta Sans Variable', system-ui, sans-serif;
+
+  /* ===== Bobot font ===== */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* ===== Tipografi ===== */
+  --text-page-title-size: 28px;
+  --text-page-title-line-height: 42px;
+  --text-page-title-weight: var(--font-weight-semibold);
+
+  --text-section-title-size: 20px;
+  --text-section-title-line-height: 30px;
+  --text-section-title-weight: var(--font-weight-semibold);
+
+  --text-body-size: 14px;
+  --text-body-line-height: 21px;
+  --text-body-weight: var(--font-weight-regular);
+
+  --text-label-size: 12px;
+  --text-label-line-height: 18px;
+  --text-label-weight: var(--font-weight-medium);
+
+  --text-amount-size: 28px;
+  --text-amount-line-height: 42px;
+  --text-amount-weight: 500;
+}

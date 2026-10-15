@@ -1,0 +1,112 @@
+.row-menu {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.transaction-menu-trigger {
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--neutral-400);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.transaction-menu-trigger:hover,
+.transaction-menu-trigger[aria-expanded="true"] {
+  background-color: var(--neutral-100);
+  color: var(--neutral-900);
+}
+
+.transaction-menu-trigger svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.transaction-menu {
+  position: fixed;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-dialog);
+}
+
+.transaction-menu .button {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.transaction-menu__error {
+  margin: var(--space-1) var(--space-2);
+  color: var(--color-error);
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
+}
+
+.confirm-dialog {
+  width: min(400px, calc(100vw - 32px));
+  max-width: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.confirm-dialog::backdrop {
+  background: var(--color-backdrop);
+}
+
+.confirm-dialog__content {
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-dialog);
+}
+
+.confirm-dialog__header {
+  margin-bottom: var(--space-2);
+}
+
+.confirm-dialog__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-section-title-size);
+  font-weight: var(--text-section-title-weight);
+  line-height: var(--text-section-title-line-height);
+  color: var(--color-text);
+}
+
+.confirm-dialog__description {
+  margin: 0 0 var(--space-5);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-line-height);
+  color: var(--color-text-muted);
+}
+
+.confirm-dialog__error {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-label-size);
+  color: var(--color-error);
+}
+
+.confirm-dialog__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
