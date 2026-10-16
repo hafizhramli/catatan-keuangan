@@ -32,12 +32,12 @@ const navigationItems = [
 
 function AppShell({ children, activeHref: controlledActiveHref }: AppShellProps) {
   const [internalActiveHref, setInternalActiveHref] = useState(
-    () => (typeof window !== 'undefined' ? window.location.hash : '') || '#transaksi'
+    () => (typeof window !== 'undefined' ? window.location.hash : '') || '#ringkasan'
   )
 
   useEffect(() => {
     function updateActiveHref() {
-      setInternalActiveHref(window.location.hash || '#transaksi')
+      setInternalActiveHref(window.location.hash || '#ringkasan')
     }
 
     window.addEventListener('hashchange', updateActiveHref)

@@ -25,25 +25,25 @@ import './Dashboard.css'
 
 function App() {
   const [activeTab, setActiveTab] = useState<'transaksi' | 'ringkasan'>(() => {
-    if (typeof window !== 'undefined' && window.location.hash === '#ringkasan') {
-      return 'ringkasan'
+    if (typeof window !== 'undefined' && window.location.hash === '#transaksi') {
+      return 'transaksi'
     }
-    return 'transaksi'
+    return 'ringkasan'
   })
 
   useEffect(() => {
     function handleHashChange() {
       const hash = window.location.hash
-      if (hash === '#ringkasan') {
-        setActiveTab('ringkasan')
-      } else {
+      if (hash === '#transaksi') {
         setActiveTab('transaksi')
+      } else {
+        setActiveTab('ringkasan')
       }
     }
 
     window.addEventListener('hashchange', handleHashChange)
     if (!window.location.hash) {
-      window.location.hash = '#transaksi'
+      window.location.hash = '#ringkasan'
     }
     return () => window.removeEventListener('hashchange', handleHashChange)
   }, [])
