@@ -35,7 +35,7 @@ export function computeCashFlowTrend(
   startDateStr = '2026-10-01',
   endDateStr = '2026-10-08',
 ): CashFlowTrendData {
-  const points: CashFlowPoint[] = []
+  const allPoints: CashFlowPoint[] = []
   const start = new Date(`${startDateStr}T00:00:00`)
   const end = new Date(`${endDateStr}T00:00:00`)
 
@@ -64,7 +64,7 @@ export function computeCashFlowTrend(
     cumExpense += dayExpense
 
     const monthShort = current.toLocaleDateString('id-ID', { month: 'short' })
-    points.push({
+    allPoints.push({
       date: dayIso,
       dayLabel: `${dayNum} ${monthShort}`,
       cumulativeIncome: cumIncome,
@@ -75,12 +75,16 @@ export function computeCashFlowTrend(
   }
 
   const netCashFlow = cumIncome - cumExpense
-  const startFmt = start.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
-  const endFmt = end.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+  const startDay = start.getDate()
+  const endDay = end.getDate()
+  const endMonth = end.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })
+
+  // Format persis seperti Figma: "Akumulasi transaksi · 1–8 Oktober 2026"
+  const periodLabel = `Akumulasi transaksi · ${startDay}–${endDay} ${endMonth}`
 
   return {
-    periodLabel: `Akumulasi transaksi · ${startFmt} – ${endFmt}`,
-    points,
+    periodLabel,
+    points: allPoints,
     netCashFlow,
   }
 }

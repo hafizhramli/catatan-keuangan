@@ -54,15 +54,16 @@
   align-items: center;
   gap: var(--space-2);
   border-radius: var(--radius-md);
-  background-color: #52550f;
-  color: #ffffff;
+  background-color: var(--color-action-hover);
+  color: var(--color-on-action);
   font-weight: var(--font-weight-medium);
   font-size: var(--text-body-size);
   padding: 0 var(--space-4);
+  transition: background-color 0.15s ease;
 }
 
 .page-header__add-btn:hover {
-  background-color: #3f420b;
+  background-color: var(--color-surface-inverse);
 }
 
 .page-header__bottom {
@@ -79,19 +80,27 @@
   gap: var(--space-3);
 }
 
+.page-header__range-container {
+  position: relative;
+}
+
 .page-header__range-btn {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  padding: 6px 12px;
+  padding: 6px var(--space-3);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   color: var(--color-text);
-  font-size: 13px;
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .page-header__range-btn:hover {
@@ -99,9 +108,25 @@
   background: var(--color-surface-subtle);
 }
 
+.page-header__range-btn--active {
+  border-color: var(--color-action);
+  background-color: var(--color-action-soft);
+  box-shadow: 0 0 0 1px var(--color-action);
+}
+
+.page-header__range-chevron {
+  transition: transform 0.2s ease;
+  color: var(--color-text-muted);
+}
+
+.page-header__range-chevron--open {
+  transform: rotate(180deg);
+}
+
 .page-header__range-note {
   color: var(--color-text-muted);
-  font-size: 13px;
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
 }
 
 .page-header__current-date {

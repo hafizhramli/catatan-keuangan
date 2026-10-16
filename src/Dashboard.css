@@ -39,6 +39,8 @@
   margin: 0;
   color: var(--color-text-muted);
   font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
+  font-weight: var(--text-label-weight);
 }
 
 .transaction-table-card__controls {
@@ -61,6 +63,8 @@
   padding: var(--space-3) var(--space-5);
   background: var(--color-surface);
   font-size: var(--text-body-size);
+  line-height: var(--text-body-line-height);
+  border-top: 1px solid var(--color-border);
 }
 
 .transaction-table-card__net-flow {
@@ -68,44 +72,46 @@
   align-items: center;
   gap: var(--space-2);
   color: var(--color-text-muted);
-  font-size: 13px;
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
 }
 
 .transaction-table-card__net-flow strong {
-  color: #52550f;
+  color: var(--color-action-hover);
   font-weight: var(--font-weight-semibold);
-  font-size: 14px;
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-line-height);
 }
 
 .transaction-table-card__view-all {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  color: #6b6d1c;
+  color: var(--color-action);
   font-weight: var(--font-weight-medium);
-  font-size: 13px;
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
   text-decoration: none;
   transition: color 0.15s ease;
 }
 
 .transaction-table-card__view-all:hover {
-  color: #52550f;
+  color: var(--color-action-hover);
   text-decoration: underline;
 }
 
-/* ===== STATUS BAR FOOTER ===== */
+/* ===== STATUS BAR / FOOTNOTE DI BAWAH TABEL TRANSAKSI ===== */
 .dashboard-status-bar {
-  grid-column: 1 / -1;
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  padding: var(--space-4) var(--space-2);
-  margin-top: var(--space-4);
-  border-top: 1px solid var(--color-border);
+  padding: 0 var(--space-1);
+  margin-top: calc(var(--space-3) - var(--space-5));
   color: var(--color-text-muted);
-  font-size: 13px;
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
+  font-weight: var(--font-weight-regular);
   flex-wrap: wrap;
 }
 
@@ -115,8 +121,17 @@
   gap: var(--space-2);
 }
 
+.dashboard-status-bar__icon {
+  color: var(--color-action);
+  flex-shrink: 0;
+}
+
 .dashboard-status-bar__right {
   font-family: var(--font-sans);
+  color: var(--color-text-muted);
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
+  font-weight: var(--font-weight-regular);
 }
 
 /* ===== RESPONSIVE MEDIA QUERIES ===== */

@@ -33,8 +33,8 @@
 }
 
 .legend-dot {
-  width: 8px;
-  height: 8px;
+  width: var(--space-2);
+  height: var(--space-2);
   border-radius: var(--radius-full);
   flex-shrink: 0;
 }
@@ -56,7 +56,8 @@
 }
 
 .calendar-weekday {
-  font-size: 11px;
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-muted);
   padding: var(--space-1) 0;
@@ -72,47 +73,117 @@
   gap: var(--space-1);
 }
 
+/* Reset tombol sel kalender menggunakan token sistem desain */
 .calendar-cell {
   position: relative;
-  min-height: 44px;
+  min-height: 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   padding: var(--space-1) 2px;
   border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
   font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
   color: var(--color-text);
-  transition: background-color 0.15s ease;
+  background: transparent;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.calendar-cell:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 1px;
+}
+
+.calendar-cell--empty {
+  cursor: default;
+  border: none;
+  background: transparent;
+  pointer-events: none;
+}
+
+.calendar-cell:not(.calendar-cell--empty):not(.calendar-cell--selected):hover {
+  background-color: var(--color-surface-subtle);
 }
 
 .calendar-cell--weekend {
   color: var(--color-expense);
 }
 
-.calendar-cell--selected {
+/* ========================================================
+   1. Tanggal Sekarang (Today) - Hijau Aktif Sesuai Desain Sistem
+   ======================================================== */
+.calendar-cell__day {
+  font-size: var(--text-label-size);
+  line-height: 1.2;
+  font-weight: var(--font-weight-medium);
+}
+
+/* Saat tanggal sekarang dipilih: hijau aktif */
+.calendar-cell--today.calendar-cell--selected {
   background-color: var(--color-action-soft);
-  border: 1px solid var(--emerald-100);
+  border: 1.5px solid var(--color-action);
 }
 
-.calendar-cell--selected .calendar-cell__day {
+.calendar-cell--today.calendar-cell--selected .calendar-cell__day {
   font-weight: var(--font-weight-semibold);
-  color: var(--emerald-900);
+  color: var(--color-surface-inverse);
 }
 
+/* Saat tanggal sekarang tidak dipilih: indikator aksen hijau */
+.calendar-cell--today:not(.calendar-cell--selected) {
+  border: 1.5px solid var(--emerald-300);
+  background-color: var(--color-action-soft);
+}
+
+.calendar-cell--today:not(.calendar-cell--selected) .calendar-cell__day {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-action-hover);
+}
+
+/* ========================================================
+   2. Tanggal Lain Terpilih (Selected Non-Today)
+      Warna selain hijau sesuai desain sistem (surface subtle + text border)
+   ======================================================== */
+.calendar-cell--selected:not(.calendar-cell--today) {
+  background-color: var(--neutral-100);
+  border: 1.5px solid var(--color-text);
+  box-shadow: var(--shadow-card);
+}
+
+.calendar-cell--selected:not(.calendar-cell--today) .calendar-cell__day {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.calendar-cell--selected:not(.calendar-cell--today).calendar-cell--weekend .calendar-cell__day {
+  color: var(--color-expense);
+}
+
+/* Chips nominal di dalam sel tanggal */
 .calendar-cell__chips {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   margin-top: 2px;
   width: 100%;
   align-items: center;
 }
 
 .calendar-chip {
-  font-size: 9px;
+  font-size: 9.5px;
   font-weight: var(--font-weight-semibold);
-  line-height: 1;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 
 .calendar-chip--income {
@@ -123,6 +194,9 @@
   color: var(--color-expense);
 }
 
+/* ========================================================
+   Ringkasan Bulanan
+   ======================================================== */
 .calendar-summary-section {
   margin-top: var(--space-5);
   padding-top: var(--space-4);
@@ -154,12 +228,14 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  font-size: 11px;
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
   color: var(--color-text-muted);
 }
 
 .calendar-metric__value {
-  font-size: 13px;
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-line-height);
   font-weight: var(--font-weight-semibold);
   letter-spacing: -0.01em;
 }
@@ -176,12 +252,15 @@
   color: var(--color-expense);
 }
 
-/* Selected Day Box */
+/* ========================================================
+   3. Detail Box di Bawah Kalender (Dinamis Berubah Sesuai Tanggal)
+   ======================================================== */
 .calendar-selected-box {
-  background-color: var(--color-action-soft);
-  border: 1px solid var(--emerald-100);
   border-radius: var(--radius-md);
   padding: var(--space-3) var(--space-4);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .calendar-selected-box__header {
@@ -191,29 +270,72 @@
   margin-bottom: var(--space-3);
 }
 
-.calendar-selected-box__date {
-  font-size: 13px;
+/* Varian Hijau (Ketika Tanggal Sekarang Terpilih) */
+.calendar-selected-box--today {
+  background-color: var(--color-action-soft);
+  border: 1px solid var(--emerald-100);
+}
+
+.calendar-selected-box--today .calendar-selected-box__date {
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-line-height);
   font-weight: var(--font-weight-semibold);
-  color: var(--emerald-900);
+  color: var(--color-surface-inverse);
 }
 
-.calendar-selected-box__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  background-color: var(--emerald-100);
-  color: var(--emerald-900);
-  font-size: 11px;
-  font-weight: var(--font-weight-medium);
-  padding: 2px var(--space-2);
-  border-radius: var(--radius-full);
+.calendar-selected-box--today .calendar-selected-item__label {
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
+  color: var(--color-action-hover);
 }
 
-.calendar-selected-box__badge .badge-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: var(--radius-full);
-  background-color: var(--color-action-hover);
+.calendar-selected-box--today .calendar-selected-item__value {
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-line-height);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-surface-inverse);
+}
+
+/* Varian Netral Desain Sistem (Ketika Tanggal Lain Terpilih - Warna Selain Hijau) */
+.calendar-selected-box--neutral {
+  background-color: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+}
+
+.calendar-selected-box--neutral .calendar-selected-box__date {
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-line-height);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.calendar-selected-box--neutral .calendar-selected-item__label {
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
+  color: var(--color-text-muted);
+}
+
+.calendar-selected-box--neutral .calendar-selected-item__value {
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-line-height);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.calendar-selected-box--neutral .calendar-selected-item__value--income {
+  color: var(--color-action-hover);
+}
+
+.calendar-selected-box--neutral .calendar-selected-item__value--expense {
+  color: var(--color-expense);
+}
+
+.calendar-selected-box--neutral .calendar-selected-item__value--net-positive {
+  color: var(--color-action-hover);
+}
+
+.calendar-selected-box--neutral .calendar-selected-item__value--net-negative {
+  color: var(--color-expense);
 }
 
 .calendar-selected-box__grid {
@@ -226,15 +348,4 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-}
-
-.calendar-selected-item__label {
-  font-size: 11px;
-  color: var(--color-action-hover);
-}
-
-.calendar-selected-item__value {
-  font-size: 13px;
-  font-weight: var(--font-weight-semibold);
-  color: var(--emerald-900);
 }

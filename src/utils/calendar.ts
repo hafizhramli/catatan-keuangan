@@ -1,12 +1,15 @@
 import type { CalendarDayData, CalendarMonthSummary, Transaction } from '../types'
 import { flowOf } from './cashflow'
+import { getRealTodayIso } from './date'
 
 export function computeCalendarMonthSummary(
   transactions: Transaction[],
   year = 2026,
   month = 10,
-  selectedDateStr = '2026-10-08',
+  selectedDateStr?: string,
 ): CalendarMonthSummary {
+  const realToday = getRealTodayIso()
+  const activeSelectedDate = selectedDateStr || realToday
   const totalDays = new Date(year, month, 0).getDate() // 31 for October
 
   // First day of month day-of-week (0 is Sunday, 1 is Monday ... 6 is Saturday)
@@ -43,8 +46,8 @@ export function computeCalendarMonthSummary(
       day: dayNum,
       dateString,
       isCurrentMonth: true,
-      isSelected: dateString === selectedDateStr,
-      isToday: dateString === '2026-10-08',
+      isSelected: dateString === activeSelectedDate,
+      isToday: dateString === realToday,
       income,
       expense,
       hasTransactions: activeTxCount > 0,
@@ -52,7 +55,7 @@ export function computeCalendarMonthSummary(
   }
 
   // Selected day transactions
-  const selectedTx = transactions.filter((t) => t.date.slice(0, 10) === selectedDateStr)
+  const selectedTx = transactions.filter((t) => t.date.slice(0, 10) === activeSelectedDate)
   let selectedDayIncome = 0
   let selectedDayExpense = 0
   for (const t of selectedTx) {
@@ -61,15 +64,19 @@ export function computeCalendarMonthSummary(
     selectedDayExpense += flow.expense
   }
 
+  const monthDate = new Date(year, month - 1, 1)
+  const rawMonthName = monthDate.toLocaleDateString('id-ID', { month: 'long' })
+  const monthName = rawMonthName.charAt(0).toUpperCase() + rawMonthName.slice(1)
+
   return {
-    monthName: 'Oktober',
+    monthName,
     year,
     days,
     // Figures as shown on the Figma overview:
     monthlyIncome: 2000000,
     monthlyExpense: 3000000,
     monthlyNet: -1000000,
-    selectedDate: selectedDateStr,
+    selectedDate: activeSelectedDate,
     selectedDayIncome,
     selectedDayExpense,
     selectedDayNet: selectedDayIncome - selectedDayExpense,

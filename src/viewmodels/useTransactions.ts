@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import type { CalendarMonthSummary, CashFlowTrendData, NewTransaction, Transaction } from '../types'
 import { transactionRepository } from '../repositories/transactionRepository'
-import { getRangeStart, getToday, type DateRange } from '../utils/date'
+import { getRangeStart, getRealTodayIso, getToday, type DateRange, type DateRangeValue } from '../utils/date'
 import { flowOf, computeCashFlowTrend } from '../utils/cashflow'
 import { computeCalendarMonthSummary } from '../utils/calendar'
 import { summarizeExpenseCategories } from '../utils/summary'
@@ -12,7 +12,7 @@ const OPENING_BALANCE = 2500000
 
 const isSameDay = (iso: string, day: string) => iso.slice(0, 10) === day
 
-export default function useTransactions(range: DateRange = 'month') {
+export default function useTransactions(range: DateRange | DateRangeValue = 'month') {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   const [loadAttempt, setLoadAttempt] = useState(0)
@@ -52,8 +52,19 @@ export default function useTransactions(range: DateRange = 'month') {
     await transactionRepository.remove(id)
   }
 
-  const today = getToday()
-  const rangeStart = getRangeStart(range)
+  const demoToday = getToday()
+  const realToday = getRealTodayIso()
+
+  let rangeStart: string
+  let rangeEnd: string
+
+  if (typeof range === 'object' && range !== null) {
+    rangeStart = range.startDate
+    rangeEnd = range.endDate
+  } else {
+    rangeStart = getRangeStart(range)
+    rangeEnd = demoToday
+  }
 
   // Hitung pemasukan, pengeluaran, dan neto periode menggunakan flowOf
   let periodIncome = 0
@@ -62,7 +73,7 @@ export default function useTransactions(range: DateRange = 'month') {
 
   for (const t of transactions) {
     const tDay = t.date.slice(0, 10)
-    if (tDay >= rangeStart && tDay <= today) {
+    if (tDay >= rangeStart && tDay <= rangeEnd) {
       periodTransactions.push(t)
       const flow = flowOf(t)
       periodIncome += flow.income
@@ -73,13 +84,16 @@ export default function useTransactions(range: DateRange = 'month') {
   const periodNetFlow = periodIncome - periodExpenses
   const periodOpeningBalance = OPENING_BALANCE
 
-  // Hitung transaksi hari ini menggunakan flowOf
+  // Hitung transaksi hari ini menggunakan flowOf (gunakan realToday jika ada transaksi, atau fallback ke demoToday)
+  const isTodayTransactionsAvailable = transactions.some((t) => isSameDay(t.date, realToday))
+  const activeTodayDate = isTodayTransactionsAvailable ? realToday : demoToday
+
   let todayIncome = 0
   let todayExpenses = 0
   let todayRecordedCount = 0
 
   for (const t of transactions) {
-    if (isSameDay(t.date, today)) {
+    if (isSameDay(t.date, activeTodayDate)) {
       const flow = flowOf(t)
       todayIncome += flow.income
       todayExpenses += flow.expense
@@ -91,12 +105,12 @@ export default function useTransactions(range: DateRange = 'month') {
 
   const netFlowToday = todayIncome - todayExpenses
 
-  // Hitung saldo: saldo awal + akumulasi bersih hingga hari ini
+  // Hitung saldo: saldo awal + akumulasi bersih hingga rentang tanggal
   let totalCumulativeIncome = 0
   let totalCumulativeExpenses = 0
 
   for (const t of transactions) {
-    if (t.date.slice(0, 10) <= today) {
+    if (t.date.slice(0, 10) <= rangeEnd) {
       const flow = flowOf(t)
       totalCumulativeIncome += flow.income
       totalCumulativeExpenses += flow.expense
@@ -110,33 +124,42 @@ export default function useTransactions(range: DateRange = 'month') {
   const categorySummary = summarizeExpenseCategories(periodTransactions)
 
   // Transaksi hari ini untuk tabel (tampilkan semua status, urutkan terbaru)
-  const todayTransactions = transactions.filter((t) => isSameDay(t.date, today))
+  const todayTransactions = transactions.filter((t) => isSameDay(t.date, activeTodayDate))
   const newestTodayTransactions = [...todayTransactions].sort((a, b) => b.date.localeCompare(a.date))
 
   // Tren Arus Kas berdasarkan rentang tanggal
   const cashFlowTrend: CashFlowTrendData = computeCashFlowTrend(
     transactions,
     rangeStart,
-    today,
+    rangeEnd,
   )
 
-  // Ringkasan Kalender
-  const todayParts = today.split('-')
-  const currentYear = Number(todayParts[0]) || 2026
-  const currentMonth = Number(todayParts[1]) || 10
+  // Ringkasan Kalender menggunakan tanggal sekarang (realtime)
+  const realTodayParts = realToday.split('-')
+  const currentYear = Number(realTodayParts[0]) || 2026
+  const currentMonth = Number(realTodayParts[1]) || 10
   const calendarSummary: CalendarMonthSummary = computeCalendarMonthSummary(
     transactions,
     currentYear,
     currentMonth,
-    today,
+    realToday,
   )
 
   // Footer status bar dinamis
-  const now = new Date()
-  const timeStr = `${String(now.getHours()).padStart(2, '0')}.${String(now.getMinutes()).padStart(2, '0')}`
+  let updateTime = '14.20'
+  if (newestTodayTransactions.length > 0) {
+    const latestDate = new Date(newestTodayTransactions[0].date)
+    if (!isNaN(latestDate.getTime())) {
+      updateTime = `${String(latestDate.getHours()).padStart(2, '0')}.${String(latestDate.getMinutes()).padStart(2, '0')}`
+    }
+  } else {
+    const now = new Date()
+    updateTime = `${String(now.getHours()).padStart(2, '0')}.${String(now.getMinutes()).padStart(2, '0')}`
+  }
+
   const footerData = {
-    lastUpdatedText: `Semua catatan tersimpan di cloud · diperbarui pukul ${timeStr} WIB`,
-    equationText: `Saldo = ${formatRupiah(periodOpeningBalance)} + ${formatRupiah(totalCumulativeIncome)} − ${formatRupiah(totalCumulativeExpenses)}`,
+    lastUpdatedText: `Semua catatan tersimpan · diperbarui pukul ${updateTime} WIB`,
+    equationText: `Saldo = ${formatRupiah(periodOpeningBalance)} + ${formatRupiah(totalCumulativeIncome)} – ${formatRupiah(totalCumulativeExpenses)}`,
   }
 
   return {

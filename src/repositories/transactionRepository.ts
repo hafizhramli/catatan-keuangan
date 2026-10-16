@@ -27,15 +27,37 @@ export type TransactionRepository = {
 
 const COLLECTION_NAME = 'transactions'
 
-// Inisialisasi data awal ke Firestore jika koleksi masih kosong
+// Inisialisasi data awal ke Firestore jika koleksi masih kosong atau ada duplikasi
 async function ensureSeedData(): Promise<void> {
   try {
     const colRef = collection(db, COLLECTION_NAME)
     const snapshot = await getDocs(colRef)
+
+    // Bersihkan duplikat jika ada duplikasi dokumen dari percobaan sebelumnya
+    const seen = new Set<string>()
+    const toDelete: string[] = []
+    for (const docSnap of snapshot.docs) {
+      const data = docSnap.data()
+      const key = `${data.name}|${data.date}|${data.amount}|${data.type}`
+      if (seen.has(key)) {
+        toDelete.push(docSnap.id)
+      } else {
+        seen.add(key)
+      }
+    }
+
+    if (toDelete.length > 0) {
+      const deleteBatch = writeBatch(db)
+      for (const id of toDelete) {
+        deleteBatch.delete(doc(colRef, id))
+      }
+      await deleteBatch.commit()
+    }
+
     if (snapshot.empty) {
       const batch = writeBatch(db)
       for (const item of seedTransactions) {
-        const docRef = doc(colRef)
+        const docRef = doc(colRef, item.id)
         batch.set(docRef, {
           name: item.name,
           category: item.category,
@@ -49,6 +71,40 @@ async function ensureSeedData(): Promise<void> {
         })
       }
       await batch.commit()
+    } else {
+      const updateBatch = writeBatch(db)
+      let hasUpdates = false
+      for (const item of seedTransactions) {
+        const docSnap = snapshot.docs.find(
+          (d) => d.id === item.id || d.data().name === item.name,
+        )
+        if (docSnap) {
+          const existingData = docSnap.data()
+          if (existingData.date !== item.date || existingData.amount !== item.amount) {
+            updateBatch.update(doc(colRef, docSnap.id), {
+              date: item.date,
+              amount: item.amount,
+            })
+            hasUpdates = true
+          }
+        } else {
+          updateBatch.set(doc(colRef, item.id), {
+            name: item.name,
+            category: item.category,
+            source: item.source,
+            type: item.type,
+            status: item.status,
+            amount: item.amount,
+            date: item.date,
+            note: item.note || '',
+            createdAt: new Date().toISOString(),
+          })
+          hasUpdates = true
+        }
+      }
+      if (hasUpdates) {
+        await updateBatch.commit()
+      }
     }
   } catch (error) {
     console.error('Error saat inisialisasi data awal Firestore:', error)

@@ -98,3 +98,26 @@
   align-items: center;
   justify-content: flex-end;
 }
+
+.transaction-row--clickable {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.transaction-row--clickable:hover {
+  background-color: var(--neutral-50);
+}
+
+.transaction-row--selected {
+  background-color: #f7f9eb !important;
+  box-shadow: inset 4px 0 0 0 var(--color-action);
+}
+
+.transaction-row--selected:hover {
+  background-color: #f3f6e1 !important;
+}
+
+.transaction-row:focus-visible {
+  outline: 2px solid var(--focus-ring-color);
+  outline-offset: -2px;
+}

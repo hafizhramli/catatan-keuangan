@@ -12,9 +12,19 @@ type TransactionRowProps = {
   transaction: Transaction
   onEdit?: (transaction: Transaction) => void
   onRemove: (id: string) => Promise<void>
+  isSelected?: boolean
+  onSelect?: (transaction: Transaction) => void
+  showIcon?: boolean
 }
 
-function TransactionRow({ transaction, onEdit, onRemove }: TransactionRowProps) {
+function TransactionRow({
+  transaction,
+  onEdit,
+  onRemove,
+  isSelected = false,
+  onSelect,
+  showIcon = true,
+}: TransactionRowProps) {
   const isRefunded = transaction.status === 'refunded'
   const icon = getCategoryIcon(transaction.category)
   const statusConfig = TRANSACTION_STATUS_BADGE[transaction.status] ?? {
@@ -25,16 +35,40 @@ function TransactionRow({ transaction, onEdit, onRemove }: TransactionRowProps) 
   const displayAmount = isRefunded || transaction.type === 'expense' ? -transaction.amount : transaction.amount
   const amountTypeClass = isRefunded || transaction.type === 'expense' ? 'expense' : 'income'
 
+  const rowClasses = [
+    'transaction-row',
+    isSelected ? 'transaction-row--selected' : '',
+    onSelect ? 'transaction-row--clickable' : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
   return (
-    <tr className="transaction-row">
+    <tr
+      className={rowClasses}
+      onClick={onSelect ? () => onSelect(transaction) : undefined}
+      tabIndex={onSelect ? 0 : undefined}
+      onKeyDown={
+        onSelect
+          ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                onSelect(transaction)
+              }
+            }
+          : undefined
+      }
+    >
       <td className="transaction-cell--name">
         <div className="transaction-item">
-          <div
-            className={`transaction-icon-tile transaction-icon-tile--${transaction.type}`}
-            aria-hidden="true"
-          >
-            {createElement(icon, { size: 18 })}
-          </div>
+          {showIcon ? (
+            <div
+              className={`transaction-icon-tile transaction-icon-tile--${transaction.type}`}
+              aria-hidden="true"
+            >
+              {createElement(icon, { size: 18 })}
+            </div>
+          ) : null}
           <div className="transaction-name">
             <span className="transaction-name__title">{transaction.name}</span>
             <span className="transaction-name__date">{formatDate(transaction.date)}</span>
@@ -49,7 +83,10 @@ function TransactionRow({ transaction, onEdit, onRemove }: TransactionRowProps) 
       <td className={`transaction-amount transaction-amount--${amountTypeClass}`}>
         {formatRupiah(displayAmount, { signed: true })}
       </td>
-      <td className="transaction-actions-cell">
+      <td
+        className="transaction-actions-cell"
+        onClick={(e) => e.stopPropagation()}
+      >
         <RowMenu
           label={`Aksi transaksi ${transaction.name}`}
           onEdit={onEdit ? () => onEdit(transaction) : undefined}
