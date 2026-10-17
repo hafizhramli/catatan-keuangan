@@ -1,11 +1,12 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowDownLeft, ArrowRight, ArrowUpRight, CheckCircle2, Search, Wallet, X } from 'lucide-react'
-import type { DateRange } from './utils/date'
+import { getDefaultDateRange, type DateRangeValue } from './utils/date'
 import type { Transaction } from './types'
 
 import useTransactions from './viewmodels/useTransactions'
 import AppShell from './component/AppShell'
 import PageHeader from './component/PageHeader'
+import TransactionsPage from './component/TransactionsPage'
 import TransactionForm from './component/TransactionForm'
 import SummaryCard from './component/SummaryCard'
 import TransactionRow from './component/TransactionRow'
@@ -23,10 +24,42 @@ import './App.css'
 import './Dashboard.css'
 
 function App() {
-  const [dateRange, setDateRange] = useState<DateRange>('month')
+  const [activeTab, setActiveTab] = useState<'transaksi' | 'ringkasan'>(() => {
+    if (typeof window !== 'undefined' && window.location.hash === '#transaksi') {
+      return 'transaksi'
+    }
+    return 'ringkasan'
+  })
+
+  useEffect(() => {
+    function handleHashChange() {
+      const hash = window.location.hash
+      if (hash === '#transaksi') {
+        setActiveTab('transaksi')
+      } else {
+        setActiveTab('ringkasan')
+      }
+    }
+
+    window.addEventListener('hashchange', handleHashChange)
+    if (!window.location.hash) {
+      window.location.hash = '#ringkasan'
+    }
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [])
+
+  useEffect(() => {
+    const mainEl = document.querySelector('.app-main')
+    if (mainEl) {
+      mainEl.scrollTop = 0
+    }
+  }, [activeTab])
+
+  const [dateRange, setDateRange] = useState<DateRangeValue>(() => getDefaultDateRange())
   const {
     status,
     retryLoad,
+    transactions,
     addTransaction,
     updateTransaction,
     removeTransaction,
@@ -108,16 +141,7 @@ function App() {
   })
 
   return (
-    <AppShell>
-      <PageHeader
-        greeting={`${greetingTime}, Nabila`}
-        title="Ringkasan keuangan"
-        onAddTransaction={handleOpenAddDialog}
-        disabled={status !== 'ready'}
-        dateRange={dateRange}
-        onDateRangeChange={setDateRange}
-      />
-
+    <AppShell activeHref={`#${activeTab}`}>
       {status === 'loading' ? (
         <div className="dashboard-state" role="status" aria-live="polite">
           Menghubungkan ke Cloud Firestore & memuat data transaksi...
@@ -180,7 +204,26 @@ function App() {
             </div>
           </dialog>
 
-          <div className="dashboard-layout" id="ringkasan">
+          {activeTab === 'transaksi' ? (
+            <TransactionsPage
+              transactions={transactions}
+              onAddTransaction={handleOpenAddDialog}
+              onEditTransaction={handleOpenEditDialog}
+              onRemoveTransaction={removeTransaction}
+              disabled={status !== 'ready'}
+            />
+          ) : (
+            <>
+              <PageHeader
+                greeting={`${greetingTime}, Nabila`}
+                title="Ringkasan keuangan"
+                onAddTransaction={handleOpenAddDialog}
+                disabled={status !== 'ready'}
+                dateRange={dateRange}
+                onDateRangeChange={setDateRange}
+              />
+
+              <div className="dashboard-layout">
             {/* Top 3 Summary Cards */}
             <section className="summary-section" aria-labelledby="summary-title">
               <h2 className="visually-hidden" id="summary-title">
@@ -219,7 +262,7 @@ function App() {
                 <CashFlowChart data={cashFlowTrend} />
 
                 {/* 2. Kartu Tabel Transaksi hari ini */}
-                <Card className="transaction-table-card" id="transaksi">
+                <Card className="transaction-table-card">
                   <div className="transaction-table-card__header">
                     <div className="transaction-table-card__title-group">
                       <h2 className="section-title">Transaksi hari ini</h2>
@@ -300,6 +343,17 @@ function App() {
                     </a>
                   </div>
                 </Card>
+
+                {/* Footnote status bar di bawah tabel transaksi */}
+                <div className="dashboard-status-bar">
+                  <div className="dashboard-status-bar__left">
+                    <CheckCircle2 size={16} className="dashboard-status-bar__icon" aria-hidden="true" />
+                    <span>{footerData.lastUpdatedText}</span>
+                  </div>
+                  <div className="dashboard-status-bar__right">
+                    <span>{footerData.equationText}</span>
+                  </div>
+                </div>
               </div>
 
               {/* Kolom Kanan (4) */}
@@ -314,20 +368,11 @@ function App() {
                 <CalendarWidget data={calendarSummary} />
               </div>
             </div>
-
-            {/* Baris "Semua catatan tersimpan" (Status Bar) */}
-            <footer className="dashboard-status-bar">
-              <div className="dashboard-status-bar__left">
-                <CheckCircle2 size={16} aria-hidden="true" />
-                <span>{footerData.lastUpdatedText}</span>
-              </div>
-              <div className="dashboard-status-bar__right">
-                <span>{footerData.equationText}</span>
-              </div>
-            </footer>
           </div>
         </>
-      ) : null}
+      )}
+    </>
+  ) : null}
     </AppShell>
   )
 }

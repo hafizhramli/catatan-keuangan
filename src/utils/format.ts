@@ -2,7 +2,7 @@ type FormatOptions = { signed?: boolean }
 const rupiahFormatter = new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 })
 
 export function formatRupiah(amount: number, { signed = false }: FormatOptions = {}): string {
-  const sign = amount < 0 ? '−' : amount > 0 && signed ? '+' : ''
+  const sign = amount < 0 ? '-' : amount > 0 && signed ? '+' : ''
   return `${sign}Rp${rupiahFormatter.format(Math.abs(amount))}`
 }
 
@@ -18,13 +18,10 @@ export function formatDate(dateString: string): string {
     month: 'short',
     year: 'numeric',
   })
-  const formattedTime = date.toLocaleTimeString('id-ID', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hourCycle: 'h23',
-  })
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
 
-  return `${formattedDate} · ${formattedTime}`
+  return `${formattedDate} · ${hours}.${minutes}`
 }
 
 export function formatShortRupiah(amount: number): string {

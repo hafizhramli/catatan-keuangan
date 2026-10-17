@@ -89,12 +89,38 @@
 .transaction-actions-cell {
   text-align: right;
   vertical-align: middle;
+  padding-left: var(--space-2);
   padding-right: var(--space-5);
-  width: 44px;
+  width: var(--table-action-col-width);
+  box-sizing: border-box;
 }
 
 .transaction-actions-cell .row-menu {
   display: inline-flex;
   align-items: center;
   justify-content: flex-end;
+  width: var(--space-6);
+}
+
+.transaction-row--clickable {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.transaction-row--clickable:hover {
+  background-color: var(--neutral-50);
+}
+
+.transaction-row--selected {
+  background-color: var(--color-row-selected) !important;
+  box-shadow: inset 4px 0 0 0 var(--color-action);
+}
+
+.transaction-row--selected:hover {
+  background-color: var(--color-row-selected-hover) !important;
+}
+
+.transaction-row:focus-visible {
+  outline: 2px solid var(--focus-ring-color);
+  outline-offset: -2px;
 }

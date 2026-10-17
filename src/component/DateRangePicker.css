@@ -1,0 +1,417 @@
+/* ========================================================
+   Date Range Picker Popover Dropdown
+   Menggunakan Token Design System yang Sudah Ada (tokens.css)
+   ======================================================== */
+.date-range-picker {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  left: 0;
+  z-index: 100;
+  width: 590px;
+  max-width: calc(100vw - var(--space-6));
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-dialog);
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  animation: datePickerFadeIn 0.18s ease-out;
+}
+
+@keyframes datePickerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.date-range-picker__body {
+  display: flex;
+  min-height: 330px;
+}
+
+/* ========================================================
+   1. Presets Sidebar
+   ======================================================== */
+.date-range-picker__sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  background-color: var(--color-surface-subtle);
+  border-right: 1px solid var(--color-border);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.date-range-picker__sidebar-header {
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  padding: var(--space-1) var(--space-2);
+}
+
+.date-range-picker__presets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.date-range-preset-btn {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.date-range-preset-btn:hover {
+  background-color: var(--neutral-100);
+}
+
+.date-range-preset-btn--active {
+  background-color: var(--color-action-soft) !important;
+  border-color: var(--emerald-100);
+}
+
+.date-range-preset-btn__name {
+  font-size: var(--text-label-size);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--text-label-line-height);
+  color: var(--color-text);
+}
+
+.date-range-preset-btn--active .date-range-preset-btn__name {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-action-hover);
+}
+
+.date-range-preset-btn__dates {
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
+  color: var(--color-text-muted);
+}
+
+.date-range-preset-btn--active .date-range-preset-btn__dates {
+  color: var(--color-action-hover);
+  opacity: 0.85;
+}
+
+/* ========================================================
+   2. Calendar View
+   ======================================================== */
+.date-range-picker__calendar-view {
+  flex: 1;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background-color: var(--color-surface);
+}
+
+.date-range-picker__calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-1);
+}
+
+.date-range-picker__month-label {
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-line-height);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.date-range-picker__nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.date-range-picker__nav-btn {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.date-range-picker__nav-btn:hover {
+  background-color: var(--color-surface-subtle);
+  border-color: var(--color-border-strong);
+}
+
+.date-range-picker__today-btn {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
+  font-weight: var(--font-weight-medium);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.date-range-picker__today-btn:hover {
+  background-color: var(--color-surface-subtle);
+  border-color: var(--color-border-strong);
+}
+
+.date-range-picker__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  text-align: center;
+}
+
+.date-range-picker__weekday {
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  padding: var(--space-1) 0;
+}
+
+.date-range-picker__weekday--weekend {
+  color: var(--color-expense);
+}
+
+/* ========================================================
+   3. Calendar Days Grid & Range Highlighting
+   ======================================================== */
+.date-range-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: var(--space-1);
+}
+
+.date-range-picker__cell-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Background continuous band for dates in range */
+.date-range-picker__cell-wrapper--in-range {
+  background-color: var(--color-action-soft);
+}
+
+.date-range-picker__cell-wrapper--range-start {
+  background: linear-gradient(to right, transparent 50%, var(--color-action-soft) 50%);
+}
+
+.date-range-picker__cell-wrapper--range-end {
+  background: linear-gradient(to left, transparent 50%, var(--color-action-soft) 50%);
+}
+
+.date-range-picker__cell {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-sans);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.12s ease, color 0.12s ease;
+  z-index: 1;
+}
+
+.date-range-picker__cell:hover:not(.date-range-picker__cell--start):not(.date-range-picker__cell--end) {
+  background-color: var(--color-action-soft);
+}
+
+.date-range-picker__cell--empty {
+  cursor: default;
+  pointer-events: none;
+}
+
+.date-range-picker__cell--weekend:not(.date-range-picker__cell--start):not(.date-range-picker__cell--end) {
+  color: var(--color-expense);
+}
+
+/* Selected Range Start & End */
+.date-range-picker__cell--start,
+.date-range-picker__cell--end {
+  background-color: var(--color-action-hover) !important;
+  color: var(--color-on-action) !important;
+  font-weight: var(--font-weight-semibold);
+  box-shadow: var(--shadow-card);
+}
+
+.date-range-picker__cell--start:hover,
+.date-range-picker__cell--end:hover {
+  background-color: var(--color-surface-inverse) !important;
+}
+
+/* In-range text styling */
+.date-range-picker__cell--in-range {
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Today indicator */
+.date-range-picker__cell--today:not(.date-range-picker__cell--start):not(.date-range-picker__cell--end) {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-action-hover);
+}
+
+.date-range-picker__today-dot {
+  position: absolute;
+  bottom: 3px;
+  width: 4px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-action);
+}
+
+.date-range-picker__cell--start .date-range-picker__today-dot,
+.date-range-picker__cell--end .date-range-picker__today-dot {
+  background-color: var(--color-on-action);
+}
+
+/* ========================================================
+   4. Footer
+   ======================================================== */
+.date-range-picker__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-surface-subtle);
+  border-top: 1px solid var(--color-border);
+}
+
+.date-range-picker__footer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.date-range-picker__reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s ease;
+}
+
+.date-range-picker__reset-btn:hover {
+  color: var(--color-action-hover);
+}
+
+.date-range-picker__summary {
+  font-size: var(--text-label-size);
+  line-height: var(--text-label-line-height);
+  color: var(--color-text);
+}
+
+.date-range-picker__footer-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.date-range-picker__btn {
+  height: 32px;
+  min-height: 32px;
+  font-size: var(--text-label-size);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+}
+
+.date-range-picker__btn--cancel {
+  color: var(--color-text);
+}
+
+.date-range-picker__btn--apply {
+  background-color: var(--color-action-hover);
+  color: var(--color-on-action);
+  font-weight: var(--font-weight-medium);
+  transition: background-color 0.15s ease;
+}
+
+.date-range-picker__btn--apply:hover {
+  background-color: var(--color-surface-inverse);
+}
+
+/* ========================================================
+   5. Mobile Responsiveness
+   ======================================================== */
+@media (max-width: 640px) {
+  .date-range-picker {
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+
+  .date-range-picker__body {
+    flex-direction: column;
+  }
+
+  .date-range-picker__sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    max-height: 120px;
+    overflow-y: auto;
+  }
+
+  .date-range-picker__presets-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .date-range-picker__footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .date-range-picker__footer-actions {
+    justify-content: flex-end;
+  }
+}

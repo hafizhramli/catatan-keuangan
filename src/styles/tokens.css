@@ -95,4 +95,9 @@
   --text-amount-size: 28px;
   --text-amount-line-height: 42px;
   --text-amount-weight: 500;
+
+  /* ===== Komponen Tabel ===== */
+  --table-action-col-width: 68px;
+  --color-row-selected: #f7f9eb;
+  --color-row-selected-hover: #f3f6e1;
 }

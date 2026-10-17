@@ -5,7 +5,7 @@ import { formatRupiah } from '../utils/format'
 
 import './SummaryCard.css'
 
-export type SummaryCardVariant = 'balance' | 'income' | 'expense'
+export type SummaryCardVariant = 'balance' | 'income' | 'expense' | 'neutral'
 
 type SummaryCardProps = {
   title: string
@@ -13,11 +13,23 @@ type SummaryCardProps = {
   footnote: string
   variant: SummaryCardVariant
   icon?: ReactNode
+  signed?: boolean
+  className?: string
+  valueClassName?: string
 }
 
-function SummaryCard({ title, amount, footnote, variant, icon }: SummaryCardProps) {
+function SummaryCard({
+  title,
+  amount,
+  footnote,
+  variant,
+  icon,
+  signed = false,
+  className = '',
+  valueClassName = '',
+}: SummaryCardProps) {
   return (
-    <Card className={`summary-card summary-card--${variant}`}>
+    <Card className={['summary-card', `summary-card--${variant}`, className].filter(Boolean).join(' ')}>
       <div className="summary-card__header">
         <span className="summary-label">{title}</span>
         {icon ? (
@@ -26,7 +38,9 @@ function SummaryCard({ title, amount, footnote, variant, icon }: SummaryCardProp
           </span>
         ) : null}
       </div>
-      <strong className="summary-value">{formatRupiah(amount)}</strong>
+      <strong className={['summary-value', valueClassName].filter(Boolean).join(' ')}>
+        {formatRupiah(amount, { signed })}
+      </strong>
       <span className="summary-footnote">{footnote}</span>
     </Card>
   )

@@ -19,7 +19,7 @@ const rawSeedTransactions = [
     type: 'income',
     status: 'recorded',
     amount: 2000000,
-    date: '2026-10-03T10:00:00',
+    date: '2026-10-01T14:00:00',
   },
   {
     id: 3,
@@ -29,7 +29,7 @@ const rawSeedTransactions = [
     type: 'income',
     status: 'recorded',
     amount: 1250000,
-    date: '2026-10-06T15:00:00',
+    date: '2026-10-04T10:00:00',
   },
   {
     id: 4,
@@ -69,7 +69,7 @@ const rawSeedTransactions = [
     type: 'expense',
     status: 'recorded',
     amount: 300000,
-    date: '2026-10-02T13:00:00',
+    date: '2026-10-01T11:00:00',
   },
   {
     id: 8,
@@ -79,7 +79,7 @@ const rawSeedTransactions = [
     type: 'expense',
     status: 'recorded',
     amount: 215000,
-    date: '2026-10-06T11:00:00',
+    date: '2026-10-03T11:00:00',
   },
   {
     id: 9,
@@ -89,7 +89,7 @@ const rawSeedTransactions = [
     type: 'expense',
     status: 'recorded',
     amount: 280000,
-    date: '2026-10-03T08:30:00',
+    date: '2026-10-01T13:00:00',
   },
   {
     id: 10,
@@ -119,7 +119,7 @@ const rawSeedTransactions = [
     type: 'expense',
     status: 'recorded',
     amount: 135000,
-    date: '2026-10-07T16:00:00',
+    date: '2026-10-06T16:00:00',
   },
   {
     id: 13,

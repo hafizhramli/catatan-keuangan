@@ -19,27 +19,32 @@ import './AppShell.css'
 
 type AppShellProps = {
   children: ReactNode
+  activeHref?: string
 }
 
 const navigationItems = [
-  { label: 'Ringkasan', href: '#ringkasan', icon: LayoutGrid, active: true },
+  { label: 'Ringkasan', href: '#ringkasan', icon: LayoutGrid },
   { label: 'Transaksi', href: '#transaksi', icon: ArrowLeftRight },
   { label: 'Kategori', href: '#kategori', icon: Tags },
   { label: 'Anggaran', href: '#anggaran', icon: PieChart },
   { label: 'Laporan', href: '#laporan', icon: TrendingUp },
 ]
 
-function AppShell({ children }: AppShellProps) {
-  const [activeHref, setActiveHref] = useState(() => window.location.hash || '#ringkasan')
+function AppShell({ children, activeHref: controlledActiveHref }: AppShellProps) {
+  const [internalActiveHref, setInternalActiveHref] = useState(
+    () => (typeof window !== 'undefined' ? window.location.hash : '') || '#ringkasan'
+  )
 
   useEffect(() => {
     function updateActiveHref() {
-      setActiveHref(window.location.hash || '#ringkasan')
+      setInternalActiveHref(window.location.hash || '#ringkasan')
     }
 
     window.addEventListener('hashchange', updateActiveHref)
     return () => window.removeEventListener('hashchange', updateActiveHref)
   }, [])
+
+  const currentHref = controlledActiveHref ?? internalActiveHref
 
   return (
     <div className="app-shell">
@@ -66,8 +71,8 @@ function AppShell({ children }: AppShellProps) {
           <nav className="app-navigation" aria-label="Navigasi utama">
             <p className="app-navigation__label">RUANG KERJA</p>
             <ul className="app-navigation__list">
-              {navigationItems.map(({ label, href, icon: Icon, active }) => {
-                const isCurrent = active || activeHref === href
+              {navigationItems.map(({ label, href, icon: Icon }) => {
+                const isCurrent = currentHref === href
                 return (
                   <li key={label}>
                     <a

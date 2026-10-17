@@ -59,12 +59,24 @@
   color: var(--color-text-muted-on-inverse);
 }
 
+.summary-card--income .summary-icon {
+  color: var(--color-action);
+}
+
 .summary-card--income .summary-value {
   color: var(--color-action);
 }
 
+.summary-card--expense .summary-icon {
+  color: var(--color-expense);
+}
+
 .summary-card--expense .summary-value {
   color: var(--color-expense);
+}
+
+.summary-value--neutral {
+  color: var(--color-text) !important;
 }
 
 .summary-footnote {
