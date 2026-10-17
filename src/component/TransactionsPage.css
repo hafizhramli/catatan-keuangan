@@ -254,7 +254,7 @@
 }
 
 .transactions-actions-header {
-  width: 44px;
+  width: var(--table-action-col-width);
 }
 
 .transactions-empty {
@@ -343,11 +343,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: var(--space-7);
+  height: var(--space-7);
   border-radius: var(--radius-md);
-  background: #e2e79e;
-  color: #52550f;
+  background: var(--color-action-soft);
+  color: var(--color-action-hover);
   margin-bottom: var(--space-4);
 }
 

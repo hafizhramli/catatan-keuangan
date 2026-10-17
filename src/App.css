@@ -193,10 +193,11 @@
 .transaction-table th:last-child {
   padding-right: var(--space-5);
   text-align: right;
+  width: var(--table-action-col-width);
 }
 
 .transaction-table th:nth-child(1) {
-  width: 33%;
+  width: 32%;
 }
 
 .transaction-table th:nth-child(2) {
@@ -208,7 +209,7 @@
 }
 
 .transaction-table th:nth-child(4) {
-  width: 15%;
+  width: 14%;
 }
 
 .transaction-table th:nth-child(5) {
@@ -216,7 +217,7 @@
 }
 
 .transaction-table th:nth-child(6) {
-  width: 6%;
+  width: var(--table-action-col-width);
 }
 
 .transaction-table th.transaction-amount-header {
